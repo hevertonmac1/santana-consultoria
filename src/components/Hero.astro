@@ -1,0 +1,260 @@
+---
+import { Scale, Zap, ShieldCheck, MapPin } from '@lucide/astro';
+---
+
+<section class="lawfarm-hero-section">
+  <div class="container hero-container">
+    <div class="hero-grid">
+      <!-- Coluna Esquerda: Imagem da Dra. Marcela -->
+      <div class="hero-image-col">
+        <div class="hero-image-wrapper">
+          <img src="/marcela-santana.jpg" alt="Dra. Marcela Santana — Advogada de Trânsito" class="hero-portrait-img" />
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Conteúdo AIDA com H1 Prata e Estética LawFarm -->
+      <div class="hero-content-col">
+        <h1 class="hero-headline">
+          Defesa Especializada em <span class="text-bronze">Direito de Trânsito.</span>
+        </h1>
+
+        <div class="hero-divider"></div>
+
+        <div class="hero-desc-wrapper">
+          <div class="rotating-badge-container">
+            <svg class="rotating-svg" viewBox="0 0 100 100" width="135" height="135">
+              <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+              <text font-size="8.4" fill="#0D1B2A" font-weight="700" letter-spacing="1.95px">
+                <textPath href="#circlePath">
+                  SANTANA CONSULTORIA ESPECIALIZADA 
+                </textPath>
+              </text>
+            </svg>
+            <div class="badge-star-center"><Scale size={30} color="var(--accent-bronze)" /></div>
+          </div>
+
+          <div class="hero-text-box">
+            <p class="hero-paragraph">
+              Recebeu notificação de <strong>Suspensão de CNH, Cassação ou Multa Grave</strong>? Analisamos minuciosamente o seu processo administrativo para identificar erros formais, prescrição e nulidades do DETRAN.
+            </p>
+
+            <div class="hero-cta-group">
+              <a href="https://api.whatsapp.com/send?phone=5534991692737&text=Ol%C3%A1%2C%20Dra.%20Marcela!%20Recebi%20uma%20notifica%C3%A7%C3%A3o%20de%20tr%C3%A2nsito%20e%20gostaria%20de%20uma%20an%C3%A1lise%20jur%C3%ADdica." target="_blank" rel="noopener noreferrer" class="lawfarm-btn-wpp">
+                <span>Chamar no WhatsApp</span>
+                <span class="arrow-circle">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Infinite Marquee Ticker LawFarm -->
+<div class="marquee-container">
+  <div class="marquee-track">
+    <div class="marquee-item">
+      <span>ÉTICA JURÍDICA</span> <span class="divider-star">✦</span>
+      <span>ESTRATÉGIA SOB MEDIDA</span> <span class="divider-star">✦</span>
+      <span>TRANSPARÊNCIA ABSOLUTA</span> <span class="divider-star">✦</span>
+      <span>CONFIDENCIALIDADE</span> <span class="divider-star">✦</span>
+      <span>ATUAÇÃO PREVENTIVA</span> <span class="divider-star">✦</span>
+      <span>ACOMPANHAMENTO PRESENTE</span> <span class="divider-star">✦</span>
+    </div>
+    <div class="marquee-item">
+      <span>ÉTICA JURÍDICA</span> <span class="divider-star">✦</span>
+      <span>ESTRATÉGIA SOB MEDIDA</span> <span class="divider-star">✦</span>
+      <span>TRANSPARÊNCIA ABSOLUTA</span> <span class="divider-star">✦</span>
+      <span>CONFIDENCIALIDADE</span> <span class="divider-star">✦</span>
+      <span>ATUAÇÃO PREVENTIVA</span> <span class="divider-star">✦</span>
+      <span>ACOMPANHAMENTO PRESENTE</span> <span class="divider-star">✦</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lawfarm-hero-section {
+    padding: 4rem 0 5rem 0;
+    background: radial-gradient(circle at 70% 30%, rgba(158, 111, 56, 0.06) 0%, transparent 60%);
+    position: relative;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: visible;
+  }
+
+  .hero-portrait-img {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 25px 50px rgba(13, 27, 42, 0.12);
+  }
+
+  .floating-stat-card {
+    position: absolute;
+    bottom: -25px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 15px 35px rgba(13, 27, 42, 0.1);
+  }
+
+  .stat-number-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    background: rgba(158, 111, 56, 0.1);
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-gold);
+  }
+
+  .stat-num {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--accent-bronze);
+  }
+
+  .stat-plus {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-bronze-dark);
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-navy);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .hero-headline {
+    font-family: var(--font-h1);
+    font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+    font-weight: 400;
+    color: var(--text-navy);
+    line-height: 1.12;
+    margin-bottom: 1.5rem;
+  }
+
+  .text-bronze {
+    color: var(--accent-bronze);
+  }
+
+  .hero-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-light) 0%, transparent 100%);
+    margin-bottom: 2rem;
+  }
+
+  .hero-desc-wrapper {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+  }
+
+  .rotating-badge-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+
+  .rotating-svg {
+    width: 100%;
+    height: 100%;
+    animation: rotateSlow 25s linear infinite;
+  }
+
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .badge-star-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .hero-paragraph {
+    font-size: 1.1rem;
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-paragraph strong {
+    color: var(--text-navy);
+  }
+
+  .hero-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .trust-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-navy);
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    padding: 0.4rem 0.95rem;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-soft);
+  }
+
+  @media (max-width: 991px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .hero-portrait-img {
+      height: 400px;
+    }
+
+    .hero-desc-wrapper {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+  }
+</style>

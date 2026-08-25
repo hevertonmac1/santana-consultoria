@@ -1,0 +1,169 @@
+---
+import { Scale, MapPin, Phone, GraduationCap } from '@lucide/astro';
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="lawfarm-footer">
+  <div class="container footer-top-grid">
+    <div class="footer-brand-column">
+      <img src="/Santana-logo-light-2.svg" alt="Santana Consultoria de Trânsito Logo" class="footer-brand-logo" />
+      <p class="brand-text">
+        Santana Consultoria de Trânsito — Atuação técnica, responsável e humanizada especializada exclusivamente em <strong>Direito de Trânsito</strong>.
+      </p>
+    </div>
+
+    <div class="footer-nav-column">
+      <h4 class="footer-col-title">Navegação Rápida</h4>
+      <ul class="footer-link-list">
+        <li><a href="#servicos">Áreas de Atuação</a></li>
+        <li><a href="#diferenciais">Nossos Diferenciais</a></li>
+        <li><a href="#dra-marcela">Quem Somos</a></li>
+        <li><a href="#como-funciona">Passo a Passo</a></li>
+        <li><a href="#faq">Perguntas Frequentes</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact-column">
+      <h4 class="footer-col-title">Atendimento</h4>
+      <p class="c-info"><MapPin size={15} color="var(--accent-bronze-light)" /> <span>Atendimento 100% Online</span></p>
+      <p class="c-info"><Phone size={15} color="var(--accent-bronze-light)" /> <span>WhatsApp: (34) 99169-2737</span></p>
+      <p class="c-info"><GraduationCap size={15} color="var(--accent-bronze-light)" /> <span>Advogada com OAB Ativa</span></p>
+    </div>
+  </div>
+
+  <div class="lawfarm-disclaimer-wrapper">
+    <div class="container">
+      <p class="disclaimer-paragraph">
+        <strong>Aviso Legal & Ética OAB:</strong> A atuação da Santana Consultoria de Trânsito é regida pelo Código de Ética e Disciplina da Ordem dos Advogados do Brasil (OAB) e pelo Provimento 205/2021. As informações contidas neste site possuem caráter educativo e informativo. Nos termos da legislação vigente, a atividade de advocacia é de meio, e não de resultado, sendo expressamente vedada a garantia prévia de sucesso em processos judiciais ou administrativos.
+      </p>
+    </div>
+  </div>
+
+  <div class="lawfarm-bottom-bar">
+    <div class="container bottom-row">
+      <span>© {currentYear} Santana Consultoria de Trânsito. Todos os direitos reservados.</span>
+      <span>Direito de Trânsito • Suspensão de CNH • Cassação • Recurso de Multas</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .lawfarm-footer {
+    background: #0B1728;
+    border-top: 1px solid var(--border-light);
+    padding-top: 5rem;
+    color: #94A3B8;
+  }
+
+  .footer-top-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .footer-brand-logo {
+    height: 46px;
+    width: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .brand-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    color: #CBD5E1;
+  }
+
+  .brand-text strong {
+    color: var(--accent-bronze-light);
+  }
+
+  .oab-badge-box {
+    display: inline-block;
+    background: rgba(200, 155, 102, 0.12);
+    border: 1px solid var(--border-gold);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--accent-bronze-light);
+    font-weight: 700;
+  }
+
+  .footer-col-title {
+    font-family: var(--font-h1);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-link-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-link-list a {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    transition: var(--transition-fast);
+  }
+
+  .footer-link-list a:hover {
+    color: var(--accent-bronze-light);
+  }
+
+  .oab-badge-flex {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .c-info {
+    font-size: 0.95rem;
+    color: #CBD5E1;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .lawfarm-disclaimer-wrapper {
+    background: #07101C;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.75rem 0;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    color: #64748B;
+  }
+
+  .disclaimer-paragraph strong {
+    color: #94A3B8;
+  }
+
+  .lawfarm-bottom-bar {
+    background: #040A12;
+    padding: 1.25rem 0;
+    font-size: 0.825rem;
+    color: #64748B;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 991px) {
+    .footer-top-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>

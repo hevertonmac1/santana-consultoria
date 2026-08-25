@@ -1,0 +1,107 @@
+---
+const passos = [
+  {
+    num: '01',
+    badge: 'ETAPA INICIAL',
+    title: 'Envio da Notificação pelo WhatsApp',
+    desc: 'Você envia a foto ou documento da notificação de suspensão da CNH ou auto de infração de trânsito diretamente para nossa equipe.'
+  },
+  {
+    num: '02',
+    badge: 'ANÁLISE TÉCNICA',
+    title: 'Exame de Nulidades & Prazos',
+    desc: 'A Dra. Marcela Santana realiza o exame minucioso dos requisitos formais para identificar vícios no auto de infração ou prazos prescritos pelo DETRAN.'
+  },
+  {
+    num: '03',
+    badge: 'DEFESA & EFEITO SUSPENSIVO',
+    title: 'Elaboração da Defesa & Protocolo',
+    desc: 'Protocolamos o recurso fundamentado no CTB e Resoluções CONTRAN. O protocolo tempestivo garante o efeito suspensivo para você continuar dirigindo legalmente.'
+  }
+];
+---
+
+<section id="como-funciona" class="lawfarm-process-section">
+  <div class="container">
+    <div class="section-title-box">
+      <div class="section-tag">
+        <span class="dot"></span>
+        PASSO A PASSO
+      </div>
+      <h2>Atendimento Jurídico <span class="text-bronze">Simples e Transparente</span></h2>
+      <p>Veja como funciona a nossa consultoria para resguardar o seu direito de dirigir.</p>
+    </div>
+
+    <div class="process-cards-grid">
+      {passos.map((p) => (
+        <div class="lawfarm-card process-lawfarm-card">
+          <div class="process-card-header">
+            <span class="big-process-num">{p.num}</span>
+            <span class="process-badge">{p.badge}</span>
+          </div>
+
+          <h3 class="process-title">{p.title}</h3>
+          <p class="process-desc">{p.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lawfarm-process-section {
+    padding: 6rem 0;
+    background: var(--bg-cream);
+  }
+
+  .process-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .process-lawfarm-card {
+    border-top: 3px solid var(--accent-bronze);
+    background: var(--bg-card);
+  }
+
+  .process-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .big-process-num {
+    font-family: var(--font-h1);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--accent-bronze);
+    line-height: 1;
+  }
+
+  .process-badge {
+    font-size: 0.725rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--accent-bronze);
+    background: rgba(158, 111, 56, 0.08);
+    border: 1px solid var(--border-gold);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+  }
+
+  .process-title {
+    font-family: var(--font-h1);
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    color: var(--text-navy);
+  }
+
+  .process-desc {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.65;
+  }
+</style>

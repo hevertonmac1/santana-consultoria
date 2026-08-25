@@ -1,0 +1,128 @@
+---
+import { Scale, MapPin } from '@lucide/astro';
+---
+
+<div class="top-announcement-bar">
+  <div class="container top-announcement-container">
+    <div class="top-left">
+      <span class="top-icon"><Scale class="inline-icon" size={15} /></span>
+      <strong>Santana Consultoria de Trânsito</strong> — Especializada em Direito de Trânsito
+    </div>
+    <div class="top-right">
+      <span class="top-right-info"><MapPin class="inline-icon" size={14} /> Atendimento 100% Online em Todo o Brasil • OAB Ativa</span>
+    </div>
+  </div>
+</div>
+
+<header class="lawfarm-header">
+  <div class="container header-container">
+    <a href="#" class="brand-link" title="Santana Consultoria de Trânsito — Dra. Marcela Santana">
+      <img src="/Santana-logo-dark-2.svg" alt="Santana Consultoria de Trânsito Logo" class="header-logo" />
+    </a>
+
+    <nav class="nav-links-menu">
+      <a href="#servicos" class="nav-item">Serviços</a>
+      <a href="#diferenciais" class="nav-item">Diferenciais</a>
+      <a href="#dra-marcela" class="nav-item">Quem Somos</a>
+      <a href="#como-funciona" class="nav-item">Como Funciona</a>
+      <a href="#faq" class="nav-item">Perguntas Frequentes</a>
+    </nav>
+
+    <div class="header-action">
+      <a href="https://api.whatsapp.com/send?phone=5534991692737&text=Ol%C3%A1%2C%20Dra.%20Marcela!%20Gostaria%20de%20falar%20no%20WhatsApp." target="_blank" rel="noopener noreferrer" class="lawfarm-btn-wpp btn-nav">
+        <span>Chamar no WhatsApp</span>
+        <span class="arrow-circle">↗</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .top-announcement-bar {
+    background: var(--bg-cream-alt);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0.5rem 0;
+    font-size: 0.8rem;
+    color: var(--text-body);
+  }
+
+  .top-announcement-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .top-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .top-left strong {
+    color: var(--text-navy);
+  }
+
+  .top-right-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .inline-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .lawfarm-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247, 245, 240, 0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 1rem 0;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .nav-links-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-item {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-navy);
+    transition: var(--transition-fast);
+  }
+
+  .nav-item:hover {
+    color: var(--accent-bronze);
+  }
+
+  .btn-nav {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 991px) {
+    .nav-links-menu {
+      display: none;
+    }
+  }
+</style>

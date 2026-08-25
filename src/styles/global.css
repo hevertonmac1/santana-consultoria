@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Prata&display=swap');
+
+:root {
+  /* LawFarm Light Cream Color System */
+  --bg-cream: #F7F5F0;
+  --bg-cream-alt: #EFECE6;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FFFFFF;
+  
+  --text-navy: #0D1B2A;
+  --text-heading: #0F1E36;
+  --text-body: #4A5568;
+  --text-muted: #64748B;
+  --text-muted-dark: #94A3B8;
+  
+  --accent-bronze: #9E6F38;
+  --accent-bronze-dark: #845724;
+  --accent-bronze-light: #C89B66;
+  --accent-bronze-glow: rgba(158, 111, 56, 0.2);
+  
+  --accent-gold: #9E6F38;
+  --accent-gold-light: #845724;
+  
+  --accent-wpp: #25d366;
+  --accent-wpp-hover: #1ebe5d;
+  
+  --border-light: #E5E0D8;
+  --border-cream-dark: #DDD7CD;
+  --border-gold: rgba(158, 111, 56, 0.25);
+  --border-gold-bright: rgba(158, 111, 56, 0.5);
+  
+  --font-h1: 'Prata', Georgia, serif;
+  --font-heading: 'Prata', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --radius-flat: 0px;
+  --radius-pill: 9999px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --shadow-soft: 0 10px 30px rgba(13, 27, 42, 0.05);
+  --shadow-hover: 0 20px 40px rgba(13, 27, 42, 0.09);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  background-color: var(--bg-cream);
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: var(--bg-cream);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* LawFarm Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400 !important;
+  color: var(--text-heading);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-family: var(--font-h1);
+  color: var(--text-navy);
+  line-height: 1.15;
+}
+
+h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  color: var(--text-heading);
+}
+
+.text-gold, .text-bronze {
+  font-weight: 400 !important;
+  background: linear-gradient(90deg, #0D1B2A 0%, #684C2E 35%, #9E6F38 75%, #B58A59 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline;
+}
+
+.text-gold-light {
+  color: var(--accent-bronze-light);
+}
+
+/* Section Title Box */
+.section-title-box {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.section-title-box h2 {
+  font-family: var(--font-heading);
+  font-weight: 400 !important;
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  margin-bottom: 1rem;
+}
+
+.section-title-box p {
+  font-size: 1.05rem;
+  color: var(--text-body);
+}
+
+/* LawFarm Pill Buttons */
+.lawfarm-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.75rem;
+  background: var(--accent-bronze);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 8px 20px var(--accent-bronze-glow);
+}
+
+.lawfarm-btn-primary:hover {
+  background: var(--accent-bronze-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(158, 111, 56, 0.35);
+}
+
+.lawfarm-btn-primary .arrow-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: transform var(--transition-fast);
+}
+
+.lawfarm-btn-primary:hover .arrow-circle {
+  transform: rotate(45deg);
+}
+
+.lawfarm-btn-wpp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.85rem;
+  background: var(--accent-bronze);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: 0 8px 25px var(--accent-bronze-glow);
+}
+
+.lawfarm-btn-wpp:hover {
+  background: var(--accent-bronze-dark);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(158, 111, 56, 0.4);
+}
+
+.lawfarm-btn-wpp .arrow-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.lawfarm-btn-wpp:hover .arrow-circle {
+  transform: rotate(45deg);
+}
+
+.lawfarm-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.6rem;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  color: var(--text-navy);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-soft);
+}
+
+.lawfarm-btn-outline:hover {
+  background: var(--bg-cream-alt);
+  border-color: var(--accent-bronze);
+  color: var(--accent-bronze);
+  transform: translateY(-2px);
+}
+
+/* Section Title Tag & Box (Plain Text Eyebrow without pill/border) */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--accent-bronze);
+  font-size: 0.825rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+}
+
+.section-tag .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-bronze);
+  box-shadow: 0 0 6px var(--accent-bronze-glow);
+}
+
+/* Infinite Marquee Ticker */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--bg-cream-alt);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 1rem 0;
+}
+
+.marquee-track {
+  display: inline-flex;
+  gap: 3rem;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-navy);
+}
+
+.marquee-item .divider-star {
+  color: var(--accent-bronze);
+  font-size: 0.9rem;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* LawFarm Cards */
+.lawfarm-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  transition: var(--transition-normal);
+  position: relative;
+  box-shadow: var(--shadow-soft);
+}
+
+.lawfarm-card:hover {
+  border-color: var(--accent-bronze);
+  background: var(--bg-card);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Floating Mobile WPP Bar */
+.mobile-float-wpp {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(247, 245, 240, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-light);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -10px 30px rgba(13, 27, 42, 0.1);
+}
+
+@media (min-width: 768px) {
+  .mobile-float-wpp {
+    display: none;
+  }
+}
+

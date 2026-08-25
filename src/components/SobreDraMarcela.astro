@@ -1,0 +1,222 @@
+---
+---
+
+<section id="dra-marcela" class="lawfarm-sobre-section">
+  <div class="container sobre-grid">
+    <!-- Coluna com Exibição das Fotos Reais da Dra. Marcela -->
+    <div class="sobre-images-wrapper">
+      <div class="main-image-box">
+        <img src="/marcela-quem-somos.png" alt="Dra. Marcela Santana — Santana Advocacia" class="sobre-main-img" />
+      </div>
+      <div class="sub-image-box">
+        <img src="/marcela-equipe.jpg" alt="Dra. Marcela Santana Atendimento" class="sobre-sub-img" />
+      </div>
+    </div>
+
+    <!-- Coluna Conteúdo Bio & Credenciais -->
+    <div class="sobre-content-box">
+      <div class="section-tag">
+        <span class="dot"></span>
+        QUEM SOMOS
+      </div>
+
+      <h2 class="sobre-headline">
+        Conhecimento Jurídico Aliado a uma <span class="text-bronze">Atuação Humanizada</span>
+      </h2>
+
+      <div class="bio-paragraphs">
+        <p class="bio-text">
+          A trajetória da <strong>Dra. Marcela Santana</strong> é marcada por dedicação e compromisso com a justiça. Graduada em Direito pela <strong>Universidade Federal de Uberlândia (UFU) em 2018</strong> e inscrita na OAB desde 2022, construiu sua atuação com base na ética, responsabilidade e respeito ao cliente.
+        </p>
+
+        <p class="bio-text">
+          Desde 2023, conduz uma <strong>consultoria autônoma, técnica e sensível</strong>, voltada à compreensão integral de cada caso e especializada em resguardar os direitos dos condutores de veículos perante órgãos como DETRAN, JARI e CETRAN.
+        </p>
+      </div>
+
+      <div class="sobre-actions">
+        <a href="https://api.whatsapp.com/send?phone=5534991692737&text=Ol%C3%A1%2C%20Dra.%20Marcela!%20Li%20seu%20perfil%20e%20gostaria%20de%20apresentar%20meu%20caso%20de%20tr%C3%A2nsito." target="_blank" rel="noopener noreferrer" class="lawfarm-btn-wpp">
+          <span>Chamar no WhatsApp</span>
+          <span class="arrow-circle">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lawfarm-sobre-section {
+    padding: 6rem 0;
+    background: var(--bg-cream-alt);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .sobre-images-wrapper {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .sobre-main-img {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 20px 40px rgba(13, 27, 42, 0.1);
+  }
+
+  .sub-image-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .sobre-sub-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+  }
+
+  .experience-tag {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: var(--accent-bronze);
+    color: #ffffff;
+    padding: 0.85rem 1.2rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 25px rgba(158, 111, 56, 0.3);
+    text-align: center;
+  }
+
+  .exp-year {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .exp-sub {
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .sobre-headline {
+    font-family: var(--font-h1);
+    font-size: clamp(2.2rem, 3.8vw, 3rem);
+    font-weight: 400;
+    color: var(--text-navy);
+    line-height: 1.15;
+    margin-bottom: 1.8rem;
+  }
+
+  .attorney-profile-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.8rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .profile-logo {
+    height: 42px;
+    width: auto;
+  }
+
+  .attorney-name {
+    font-family: var(--font-h1);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--text-navy);
+  }
+
+  .attorney-title {
+    font-size: 0.85rem;
+    color: var(--accent-bronze);
+    font-weight: 600;
+  }
+
+  .bio-text {
+    font-size: 1.05rem;
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+
+  .bio-text strong {
+    color: var(--text-navy);
+  }
+
+  .principles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 2.5rem 0;
+  }
+
+  .principle-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    border-left: 2px solid var(--accent-bronze);
+    flex: 1;
+    min-width: 170px;
+  }
+
+  .p-icon {
+    font-size: 1.3rem;
+  }
+
+  .principle-item strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-navy);
+  }
+
+  .principle-item span {
+    font-size: 0.75rem;
+    color: var(--text-body);
+  }
+
+  @media (max-width: 991px) {
+    .sobre-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .sobre-images-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .sub-image-box {
+      display: none;
+    }
+  }
+</style>

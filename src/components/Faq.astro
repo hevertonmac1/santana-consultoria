@@ -1,0 +1,129 @@
+---
+const faqs = [
+  {
+    q: 'Posso continuar dirigindo enquanto apresento recurso contra a suspensão da CNH?',
+    a: 'Sim! O recurso administrativo apresentado dentro do prazo legal assegura o efeito suspensivo do processo de suspensão da CNH. Isso impede que o bloqueio da habilitação seja efetuado no sistema do DETRAN até o julgamento final pelas instâncias cabíveis.'
+  },
+  {
+    q: 'Qual é o prazo para entrar em contato após receber a notificação do DETRAN?',
+    a: 'O quanto antes melhor. A notificação de instauração do processo indica um prazo estipulado (geralmente entre 15 e 30 dias). Entrar em contato com antecedência permite examinar detalhadamente os vícios formais e elaborar a defesa técnica no tempo adequado.'
+  },
+  {
+    q: 'É garantido que a suspensão da CNH ou multa será cancelada?',
+    a: 'Em estrito respeito às normas éticas do Provimento 205/2021 do Conselho Federal da OAB, nenhum advogado pode prometer ou garantir o resultado de uma causa. O compromisso da Santana Consultoria de Trânsito é realizar um exame minucioso da legalidade do ato e elaborar uma defesa fundamentada nas nulidades previstas no CTB.'
+  },
+  {
+    q: 'Qual a diferença entre a Santana Consultoria de Trânsito e empresas de recursos de multas?',
+    a: 'A Santana Consultoria de Trânsito é conduzida pela Dra. Marcela Santana, advogada graduada pela UFU e inscrita na OAB. Oferecemos consultoria jurídica autônoma, técnica e ética, sem teses genéricas ou promessas irreais.'
+  },
+  {
+    q: 'O atendimento pode ser realizado de forma 100% online?',
+    a: 'Sim! Atendemos condutores de todo o Brasil de forma totalmente digital. O envio de documentos, notificações e o acompanhamento das instâncias ocorrem com total agilidade, segurança e confidencialidade.'
+  }
+];
+---
+
+<section id="faq" class="lawfarm-faq-section">
+  <div class="container">
+    <div class="section-title-box">
+      <div class="section-tag">
+        <span class="dot"></span>
+        PERGUNTAS FREQUENTES
+      </div>
+      <h2>Dúvidas Frequentes sobre <span class="text-bronze">Processos de Trânsito</span></h2>
+      <p>Esclarecimentos claros e pautados na legislação vigente para condutores.</p>
+    </div>
+
+    <div class="faq-accordion-wrapper">
+      {faqs.map((faq, idx) => (
+        <details class="lawfarm-faq-item" open={idx === 0}>
+          <summary class="faq-summary">
+            <span class="q-text">{faq.q}</span>
+            <span class="faq-icon-badge">+</span>
+          </summary>
+          <div class="faq-body">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lawfarm-faq-section {
+    padding: 6rem 0;
+    background: var(--bg-cream-alt);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .faq-accordion-wrapper {
+    max-width: 840px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .lawfarm-faq-item {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    overflow: hidden;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .lawfarm-faq-item[open] {
+    border-color: var(--accent-bronze);
+    background: #ffffff;
+  }
+
+  .faq-summary {
+    padding: 1.4rem 1.75rem;
+    font-family: var(--font-h1);
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text-navy);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+  }
+
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(158, 111, 56, 0.1);
+    border: 1px solid var(--border-gold);
+    color: var(--accent-bronze);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .lawfarm-faq-item[open] .faq-icon-badge {
+    transform: rotate(45deg);
+    background: var(--accent-bronze);
+    color: #ffffff;
+  }
+
+  .faq-body {
+    padding: 0 1.75rem 1.4rem 1.75rem;
+    font-size: 0.975rem;
+    color: var(--text-body);
+    line-height: 1.7;
+    border-top: 1px dashed var(--border-light);
+    margin-top: 0.5rem;
+    padding-top: 1.2rem;
+  }
+</style>

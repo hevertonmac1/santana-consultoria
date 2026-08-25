@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Dra. Marcela Santana — Santana Consultoria de Trânsito | Suspensão de CNH e Recurso de Multas",
+  description = "Consultoria especializada em Direito de Trânsito com a Dra. Marcela Santana. Defesa técnica contra Suspensão de CNH, Cassação e Recursos de Multas. Atendimento humanizado em todo o Brasil."
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://s2advogados.com.br');
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Posso continuar dirigindo enquanto apresento recurso contra a suspensão da CNH?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. O recurso administrativo protocolado tempestivamente assegura o efeito suspensivo do processo de suspensão da CNH, garantindo que você continue dirigindo regularmente até o julgamento final pelas instâncias cabíveis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Qual o prazo para recorrer da notificação do DETRAN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O prazo legal para apresentação da defesa previa ou recurso costuma ser de 15 a 30 dias contados a partir da notificação oficial. É fundamental realizar a análise técnica o quanto antes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Vale a pena recorrer de multa de trânsito ou suspensão por pontos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Com certeza. Diversos processos administrativos contêm falhas formais, prazos prescritos ou falta de aferição regular dos equipamentos. Uma defesa técnica fundamentada no CTB verifica se a penalidade respeitou o devido processo legal."
+      }
+    }
+  ]
+};
+
+const attorneySchema = {
+  "@context": "https://schema.org",
+  "@type": "Attorney",
+  "name": "Dra. Marcela Santana — Santana Consultoria de Trânsito",
+  "image": "https://s2advogados.com.br/Santana-logo-dark-2.svg",
+  "url": "https://s2advogados.com.br",
+  "telephone": "+5534991692737",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Uberlândia",
+    "addressRegion": "MG",
+    "addressCountry": "BR"
+  },
+  "knowsAbout": ["Direito de Trânsito", "Suspensão de CNH", "Cassação de CNH", "Recurso de Multas de Trânsito", "Defesa de Lei Seca"]
+};
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Icone2.png" />
+  <link rel="canonical" href={canonicalURL} />
+  
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content="https://s2advogados.com.br/Santana-logo-dark-2.svg" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={canonicalURL} />
+  <meta property="twitter:title" content={title} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content="https://s2advogados.com.br/Santana-logo-dark-2.svg" />
+
+  <!-- Schema.org Rich Snippets (SEO) -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(attorneySchema)} />
+</head>
+<body>
+  <slot />
+</body>
+</html>

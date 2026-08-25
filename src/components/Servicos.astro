@@ -1,0 +1,300 @@
+---
+import { ChevronLeft, ChevronRight } from '@lucide/astro';
+
+const servicos = [
+  {
+    badge: 'PONTUAÇÃO CNH',
+    title: 'Processo de Suspensão de CNH',
+    desc: 'Defesa técnica para motoristas que atingiram o limite de 20, 30 ou 40 pontos. Verificamos se o DETRAN cometeu falhas na notificação, prescrição dos prazos ou erros na atribuição da infração.',
+    linkText: 'Consultar Suspensão'
+  },
+  {
+    badge: 'PENALIDADE MÁXIMA',
+    title: 'Cassação da Habilitação',
+    desc: 'Atuação especializada na penalidade mais severa do CTB. Identificação rigorosa de vícios formais no processo administrativo para resguardar o seu direito de dirigir.',
+    linkText: 'Consultar Cassação'
+  },
+  {
+    badge: 'LEI SECA & VELOCIDADE',
+    title: 'Multas Autossuspensivas',
+    desc: 'Recursos para infrações gravíssimas que suspendem a CNH diretamente (Recusa ao bafômetro/Lei Seca, velocidade acima de 50%, manobra perigosa). Exame de calibração do Inmetro.',
+    linkText: 'Consultar Multa'
+  },
+  {
+    badge: 'DETRAN • JARI • CETRAN',
+    title: 'Recursos Administrativos',
+    desc: 'Elaboração de defesas personalizadas e fundamentadas no Código de Trânsito Brasileiro e Resoluções do CONTRAN para Defesa Prévia, 1ª Instância (JARI) e 2ª Instância (CETRAN).',
+    linkText: 'Consultar Recurso'
+  }
+];
+---
+
+<section id="servicos" class="lawfarm-servicos-section">
+  <div class="container">
+    <div class="servicos-header-row">
+      <div class="section-title-box servicos-title-left">
+        <div class="section-tag">
+          <span class="dot"></span>
+          ÁREAS DE ATUAÇÃO
+        </div>
+        <h2>Soluções em <span class="text-bronze">Direito de Trânsito</span></h2>
+        <p>Atuação técnica e humanizada focada exclusivamente na defesa da sua habilitação e na análise da legalidade de processos do DETRAN.</p>
+      </div>
+
+      <div class="slider-controls">
+        <button id="servicos-prev" class="slider-nav-btn" aria-label="Anterior">
+          <ChevronLeft size={22} />
+        </button>
+        <button id="servicos-next" class="slider-nav-btn" aria-label="Próximo">
+          <ChevronRight size={22} />
+        </button>
+      </div>
+    </div>
+
+    <div class="servicos-slider-track" id="servicos-track">
+      {servicos.map((s, idx) => (
+        <div class="lawfarm-card servico-lawfarm-card">
+          <div class="card-badge-row">
+            <span class="card-badge">{s.badge}</span>
+            <span class="card-index">0{idx + 1}</span>
+          </div>
+
+          <h3 class="card-title">{s.title}</h3>
+          <p class="card-desc">{s.desc}</p>
+
+          <a href={`https://api.whatsapp.com/send?phone=5534991692737&text=Ol%C3%A1%2C%20Dra.%20Marcela!%20Gostaria%20de%20consultar%20sobre%3A%20${encodeURIComponent(s.title)}`} target="_blank" rel="noopener noreferrer" class="card-action-btn">
+            <span>{s.linkText}</span>
+            <span class="arrow-badge">↗</span>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('servicos-track');
+  const prevBtn = document.getElementById('servicos-prev');
+  const nextBtn = document.getElementById('servicos-next');
+
+  if (track && prevBtn && nextBtn) {
+    const getScrollAmount = () => {
+      const firstCard = track.firstElementChild as HTMLElement;
+      return firstCard ? firstCard.offsetWidth + 24 : 360;
+    };
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    // Mouse Drag functionality
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    track.addEventListener('mousedown', (e: MouseEvent) => {
+      isDown = true;
+      track.classList.add('active-drag');
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      isDown = false;
+      track.classList.remove('active-drag');
+    });
+
+    track.addEventListener('mouseup', () => {
+      isDown = false;
+      track.classList.remove('active-drag');
+    });
+
+    track.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      track.scrollLeft = scrollLeft - walk;
+    });
+  }
+</script>
+
+<style>
+  .lawfarm-servicos-section {
+    padding: 6rem 0;
+    background: var(--bg-cream-alt);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .servicos-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+  }
+
+  .servicos-title-left {
+    text-align: left;
+    margin: 0;
+    max-width: 680px;
+  }
+
+  .slider-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .slider-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    color: var(--text-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .slider-nav-btn:hover {
+    background: var(--accent-bronze);
+    color: #ffffff;
+    border-color: var(--accent-bronze);
+    transform: translateY(-2px);
+  }
+
+  .servicos-slider-track {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    cursor: grab;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .servicos-slider-track.active-drag {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+
+  .servicos-slider-track::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .servico-lawfarm-card {
+    flex: 0 0 calc(33.333% - 1rem) !important;
+    min-width: 320px !important;
+    scroll-snap-align: start;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+  }
+
+  .card-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-badge {
+    font-size: 0.725rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--accent-bronze);
+    background: rgba(158, 111, 56, 0.08);
+    border: 1px solid var(--border-gold);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+  }
+
+  .card-index {
+    font-family: var(--font-h1);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--accent-bronze);
+  }
+
+  .card-title {
+    font-family: var(--font-h1);
+    font-size: 1.45rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text-navy);
+  }
+
+  .card-desc {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+  }
+
+  .card-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background: var(--bg-cream);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-pill);
+    color: var(--text-navy);
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: var(--transition-fast);
+  }
+
+  .card-action-btn:hover {
+    background: var(--accent-bronze);
+    color: #ffffff;
+    border-color: var(--accent-bronze);
+  }
+
+  .arrow-badge {
+    transition: transform var(--transition-fast);
+  }
+
+  .card-action-btn:hover .arrow-badge {
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 768px) {
+    .servicos-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .servico-lawfarm-card {
+      flex: 0 0 85vw;
+    }
+  }
+</style>

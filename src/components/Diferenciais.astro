@@ -1,0 +1,99 @@
+---
+const diferenciais = [
+  {
+    num: '01',
+    title: 'Atendimento Personalizado',
+    desc: 'Cada situação e notificação de trânsito é analisada em suas particularidades individuais.'
+  },
+  {
+    num: '02',
+    title: 'Estratégia Jurídica sob Medida',
+    desc: 'Medidas definidas após rigorosa análise técnica do contexto e prazos do processo no DETRAN.'
+  },
+  {
+    num: '03',
+    title: 'Comunicação Clara',
+    desc: 'Informações objetivas e transparentes sobre riscos, prazos e etapas do processo administrativo.'
+  },
+  {
+    num: '04',
+    title: 'Acompanhamento Presente',
+    desc: 'Contato próximo e ativo durante todo o desenvolvimento do recurso até a decisão final.'
+  },
+  {
+    num: '05',
+    title: 'Confidencialidade Absoluta',
+    desc: 'Informações pessoais e dados do condutor tratados com discrição e sigilo ético absoluto.'
+  },
+  {
+    num: '06',
+    title: 'Atuação Preventiva',
+    desc: 'Riscos de pontuação e bloqueio identificados com antecedência para evitar prejuízos graves.'
+  }
+];
+---
+
+<section id="diferenciais" class="lawfarm-diferenciais-section">
+  <div class="container">
+    <div class="section-title-box">
+      <div class="section-tag">
+        <span class="dot"></span>
+        NOSSO COMPROMISSO
+      </div>
+      <h2>Uma Advocacia Próxima, <span class="text-bronze">Estratégica e Responsável</span></h2>
+      <p>Conhecimento jurídico aliado a uma atuação humanizada para resolver questões complexas de trânsito.</p>
+    </div>
+
+    <div class="diferenciais-lawfarm-grid">
+      {diferenciais.map((item) => (
+        <div class="lawfarm-card dif-lawfarm-card">
+          <span class="dif-number">{item.num}</span>
+          <h3 class="dif-card-title">{item.title}</h3>
+          <p class="dif-card-desc">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lawfarm-diferenciais-section {
+    padding: 6rem 0;
+    background: var(--bg-cream);
+  }
+
+  .diferenciais-lawfarm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .dif-lawfarm-card {
+    position: relative;
+    border-top: 3px solid var(--accent-bronze);
+    background: var(--bg-card);
+  }
+
+  .dif-number {
+    font-family: var(--font-h1);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--accent-bronze);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .dif-card-title {
+    font-family: var(--font-h1);
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+    color: var(--text-navy);
+  }
+
+  .dif-card-desc {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.65;
+  }
+</style>
