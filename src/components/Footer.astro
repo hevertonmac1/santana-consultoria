@@ -25,9 +25,16 @@ const currentYear = new Date().getFullYear();
 
     <div class="footer-contact-column">
       <h4 class="footer-col-title">Atendimento</h4>
-      <p class="c-info"><MapPin size={15} color="var(--accent-bronze-light)" /> <span>Av. Cesário Alvim, 1761, Térreo — Nossa Senhora Aparecida, Uberlândia/MG · Atendimento online</span></p>
-      <p class="c-info"><Phone size={15} color="var(--accent-bronze-light)" /> <span>WhatsApp: (34) 99169-2737</span></p>
-      <p class="c-info"><GraduationCap size={15} color="var(--accent-bronze-light)" /> <span>Dra. Marcela Santana — OAB/MG 220.180</span></p>
+      <div class="c-info c-address">
+        <MapPin size={16} color="var(--accent-bronze-light)" class="c-icon" />
+        <span>
+          Av. Cesário Alvim, 1761, Térreo<br />
+          Nossa Senhora Aparecida — Uberlândia/MG<br />
+          <span class="text-online">Atendimento presencial e online</span>
+        </span>
+      </div>
+      <p class="c-info"><Phone size={15} color="var(--accent-bronze-light)" class="c-icon" /> <span>WhatsApp: (34) 99169-2737</span></p>
+      <p class="c-info"><GraduationCap size={15} color="var(--accent-bronze-light)" class="c-icon" /> <span>Dra. Marcela Santana — OAB/MG 220.180</span></p>
     </div>
   </div>
 
@@ -127,11 +134,29 @@ const currentYear = new Date().getFullYear();
   .c-info {
     font-size: 0.95rem;
     color: #CBD5E1;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    white-space: nowrap;
+    gap: 0.65rem;
+    line-height: 1.5;
+  }
+
+  .c-info.c-address {
+    align-items: flex-start;
+  }
+
+  .c-icon {
+    flex-shrink: 0;
+  }
+
+  .c-address .c-icon {
+    margin-top: 4px;
+  }
+
+  .text-online {
+    font-size: 0.85rem;
+    color: var(--accent-bronze-light);
+    opacity: 0.9;
   }
 
   .lawfarm-disclaimer-wrapper {
