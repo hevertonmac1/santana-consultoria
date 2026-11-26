@@ -1,0 +1,43 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  class?: string;
+  priority?: boolean;
+  fallbackFormat?: 'jpeg' | 'webp' | 'png';
+}
+
+const {
+  src,
+  alt,
+  widths,
+  sizes,
+  class: className,
+  priority = false,
+  fallbackFormat = 'jpeg',
+} = Astro.props;
+---
+
+<Picture
+  src={src}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  formats={['avif', 'webp']}
+  fallbackFormat={fallbackFormat}
+  priority={priority}
+  class={className}
+  pictureAttributes={{ class: 'optimized-picture' }}
+/>
+
+<style>
+  .optimized-picture {
+    display: block;
+    width: 100%;
+  }
+</style>

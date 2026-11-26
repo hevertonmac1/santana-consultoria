@@ -1,4 +1,7 @@
 ---
+import OptimizedPicture from './OptimizedPicture.astro';
+import marcelaMainImage from '../assets/img/marcela-quem-somos.png';
+import escritorioSubImage from '../assets/img/escritorio-santana-estante.jpg';
 ---
 
 <section id="dra-marcela" class="lawfarm-sobre-section">
@@ -6,10 +9,22 @@
     <!-- Coluna com Exibição das Fotos Reais da Dra. Marcela -->
     <div class="sobre-images-wrapper">
       <div class="main-image-box">
-        <img src="/marcela-quem-somos.png" alt="Dra. Marcela Santana — Santana Advocacia" class="sobre-main-img" />
+        <OptimizedPicture
+          src={marcelaMainImage}
+          alt="Dra. Marcela Santana — Santana Advocacia"
+          widths={[400, 700, 1000]}
+          sizes="(max-width: 991px) calc(100vw - 3rem), 270px"
+          class="sobre-main-img"
+        />
       </div>
       <div class="sub-image-box">
-        <img src="/escritorio-santana-estante.jpg" alt="Escritório Santana Advocacia — Recepção e Biblioteca Jurídica" class="sobre-sub-img" />
+        <OptimizedPicture
+          src={escritorioSubImage}
+          alt="Escritório Santana Advocacia — Recepção e Biblioteca Jurídica"
+          widths={[360, 600, 772]}
+          sizes="(max-width: 991px) 1px, 225px"
+          class="sobre-sub-img"
+        />
       </div>
     </div>
 
@@ -66,7 +81,7 @@
     position: relative;
   }
 
-  .sobre-main-img {
+  .main-image-box :global(.sobre-main-img) {
     width: 100%;
     height: 460px;
     object-fit: cover;
@@ -83,7 +98,7 @@
     justify-content: flex-end;
   }
 
-  .sobre-sub-img {
+  .sub-image-box :global(.sobre-sub-img) {
     width: 100%;
     height: 320px;
     object-fit: cover;

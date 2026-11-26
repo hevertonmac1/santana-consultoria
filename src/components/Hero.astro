@@ -1,5 +1,7 @@
 ---
 import { Scale, Zap, ShieldCheck, MapPin } from '@lucide/astro';
+import OptimizedPicture from './OptimizedPicture.astro';
+import heroImage from '../assets/img/escritorio-santana.jpg';
 ---
 
 <section class="lawfarm-hero-section">
@@ -8,7 +10,14 @@ import { Scale, Zap, ShieldCheck, MapPin } from '@lucide/astro';
       <!-- Coluna Esquerda: Imagem da Dra. Marcela -->
       <div class="hero-image-col">
         <div class="hero-image-wrapper">
-          <img src="/escritorio-santana.jpg" alt="Escritório da Santana Consultoria de Trânsito — Dra. Marcela Santana" class="hero-portrait-img" />
+          <OptimizedPicture
+            src={heroImage}
+            alt="Escritório da Santana Consultoria de Trânsito — Dra. Marcela Santana"
+            widths={[480, 800, 1100]}
+            sizes="(max-width: 991px) calc(100vw - 3rem), 502px"
+            priority={true}
+            class="hero-portrait-img"
+          />
         </div>
       </div>
 
@@ -93,7 +102,7 @@ import { Scale, Zap, ShieldCheck, MapPin } from '@lucide/astro';
     overflow: visible;
   }
 
-  .hero-portrait-img {
+  .hero-image-wrapper :global(.hero-portrait-img) {
     width: 100%;
     height: 580px;
     object-fit: cover;
@@ -248,7 +257,7 @@ import { Scale, Zap, ShieldCheck, MapPin } from '@lucide/astro';
       gap: 3rem;
     }
 
-    .hero-portrait-img {
+    .hero-image-wrapper :global(.hero-portrait-img) {
       height: 400px;
     }
 
