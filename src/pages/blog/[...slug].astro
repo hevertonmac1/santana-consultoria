@@ -178,10 +178,11 @@ const articleJsonLd = {
         </nav>
 
         <header class="article-header">
-          <div class="article-eyebrow">
-            <span class="article-cluster-tag">{clusterLabel}</span>
-            {data.draft && <span class="article-draft-tag">RASCUNHO (APENAS DEV)</span>}
-          </div>
+          {data.draft && (
+            <div class="article-draft-row">
+              <span class="article-draft-tag">RASCUNHO (APENAS DEV)</span>
+            </div>
+          )}
 
           <h1 class="article-title">{data.title}</h1>
 
@@ -311,10 +312,6 @@ const articleJsonLd = {
 
         <!-- CTA final obrigatório -->
         <section class="article-cta-final" aria-labelledby="cta-artigo-final-titulo">
-          <div class="section-tag">
-            <span class="dot"></span>
-            ATENDIMENTO ONLINE EM TODO O BRASIL
-          </div>
           <h2 id="cta-artigo-final-titulo" class="cta-final-title">
             {ctaFinalTitle}
           </h2>
@@ -361,7 +358,6 @@ const articleJsonLd = {
             />
           </picture>
           <div class="author-box-info">
-            <span class="author-box-eyebrow">SOBRE A AUTORA</span>
             <h2 class="author-box-name">{autor.nome}</h2>
             <p class="author-box-cred">
               {autor.cargo} • {autor.credencial}
@@ -466,20 +462,8 @@ const articleJsonLd = {
     border-bottom: 1px solid var(--border-light);
   }
 
-  .article-eyebrow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.65rem;
-    margin-bottom: 0.85rem;
-  }
-
-  .article-cluster-tag {
-    color: var(--accent-bronze);
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .article-draft-row {
+    margin-bottom: 0.75rem;
   }
 
   .article-draft-tag {
@@ -570,6 +554,7 @@ const articleJsonLd = {
     font-size: 1.08rem;
     line-height: 1.75;
     color: var(--text-body);
+    overflow-x: auto;
   }
 
   .article-body :global(h2) {
@@ -631,13 +616,12 @@ const articleJsonLd = {
 
   .article-body :global(table) {
     width: 100%;
+    display: table;
     border-collapse: collapse;
     margin: 1.6rem 0;
     font-size: 0.95rem;
     background: #ffffff;
     border: 1px solid var(--border-light);
-    display: block;
-    overflow-x: auto;
   }
 
   .article-body :global(th),
@@ -645,6 +629,10 @@ const articleJsonLd = {
     padding: 0.75rem 0.9rem;
     text-align: left;
     border-bottom: 1px solid var(--border-light);
+  }
+
+  .article-body :global(tbody tr:last-child td) {
+    border-bottom: none;
   }
 
   .article-body :global(th) {
@@ -828,15 +816,6 @@ const articleJsonLd = {
     object-fit: cover;
     object-position: center top;
     border: 1px solid var(--border-light);
-  }
-
-  .author-box-eyebrow {
-    display: block;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    color: var(--accent-bronze);
-    margin-bottom: 0.25rem;
   }
 
   .author-box-name {

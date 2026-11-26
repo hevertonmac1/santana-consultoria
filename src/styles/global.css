@@ -141,7 +141,7 @@ h2, h3, h4, h5 {
   align-items: center;
   gap: 0.85rem;
   padding: 0.85rem 1.75rem;
-  background: var(--accent-bronze);
+  background: var(--text-navy);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
@@ -149,20 +149,20 @@ h2, h3, h4, h5 {
   transition: var(--transition-fast);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  box-shadow: 0 8px 20px var(--accent-bronze-glow);
+  box-shadow: 0 8px 20px rgba(13, 27, 42, 0.2);
 }
 
 .lawfarm-btn-primary:hover {
-  background: var(--accent-bronze-dark);
+  background: #162C46;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(158, 111, 56, 0.35);
+  box-shadow: 0 12px 28px rgba(13, 27, 42, 0.32);
 }
 
 .lawfarm-btn-primary .arrow-circle {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -180,7 +180,7 @@ h2, h3, h4, h5 {
   align-items: center;
   gap: 0.85rem;
   padding: 0.9rem 1.85rem;
-  background: var(--accent-bronze);
+  background: var(--text-navy);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
@@ -188,21 +188,21 @@ h2, h3, h4, h5 {
   transition: var(--transition-fast);
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  box-shadow: 0 8px 25px var(--accent-bronze-glow);
+  box-shadow: 0 8px 25px rgba(13, 27, 42, 0.22);
 }
 
 .lawfarm-btn-wpp:hover {
-  background: var(--accent-bronze-dark);
+  background: #162C46;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(158, 111, 56, 0.4);
+  box-shadow: 0 12px 30px rgba(13, 27, 42, 0.35);
 }
 
 .lawfarm-btn-wpp .arrow-circle {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -234,31 +234,6 @@ h2, h3, h4, h5 {
   border-color: var(--accent-bronze);
   color: var(--accent-bronze);
   transform: translateY(-2px);
-}
-
-/* Section Title Tag & Box (Plain Text Eyebrow without pill/border) */
-.section-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  color: var(--accent-bronze);
-  font-size: 0.825rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 1.25rem;
-}
-
-.section-tag .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent-bronze);
-  box-shadow: 0 0 6px var(--accent-bronze-glow);
 }
 
 /* Infinite Marquee Ticker */

@@ -36,26 +36,12 @@ const wppBlogUrl = buildWhatsAppUrl(
   <main class="blog-index">
     <section class="blog-hero">
       <div class="container">
-        <div class="section-tag">
-          <span class="dot"></span>
-          BLOG JURÍDICO
-        </div>
         <h1 class="blog-hero-title">
           Conteúdo informativo sobre <span class="text-bronze">Direito de Trânsito</span>
         </h1>
         <p class="blog-hero-subtitle">
           Guias práticos e objetivos sobre multas, suspensão de CNH, cassação e procedimentos no DETRAN, JARI e CETRAN.
         </p>
-
-        {activeClusters.length > 1 && (
-          <nav class="cluster-chips" aria-label="Temas do blog">
-            {activeClusters.map((cluster) => (
-              <a href={`#tema-${cluster}`} class="cluster-chip">
-                {CLUSTER_LABELS[cluster]}
-              </a>
-            ))}
-          </nav>
-        )}
       </div>
     </section>
 
@@ -174,35 +160,6 @@ const wppBlogUrl = buildWhatsAppUrl(
     color: var(--text-body);
     max-width: 640px;
     line-height: 1.65;
-  }
-
-  .cluster-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    margin-top: 1.75rem;
-  }
-
-  .cluster-chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.45rem 0.95rem;
-    min-height: 36px;
-    border-radius: var(--radius-pill);
-    background: #ffffff;
-    border: 1px solid var(--border-light);
-    color: var(--text-navy);
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: var(--transition-fast);
-  }
-
-  .cluster-chip:hover,
-  .cluster-chip:focus-visible {
-    border-color: var(--accent-bronze);
-    color: var(--accent-bronze);
-    outline: 2px solid var(--accent-bronze);
-    outline-offset: 2px;
   }
 
   .blog-list-section {
