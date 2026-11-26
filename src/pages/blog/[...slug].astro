@@ -13,6 +13,8 @@ import {
   estimateReadingMinutes,
   cleanSlug,
   resolveBlogHeroImage,
+  resolveBlogResponsiveCover,
+  resolveBlogOgImage,
 } from '../../data/blog';
 
 export async function getStaticPaths() {
@@ -47,7 +49,12 @@ const { data } = entry;
 const autor = AUTORES[data.author] ?? AUTORES.marcela;
 const clusterLabel = CLUSTER_LABELS[data.cluster];
 const readingMinutes = estimateReadingMinutes(entry.body);
-const heroMetadata = resolveBlogHeroImage(data.heroImage);
+const responsiveCover = resolveBlogResponsiveCover(data.heroImage);
+const heroMetadata = responsiveCover ? undefined : resolveBlogHeroImage(data.heroImage);
+const ogAsset = resolveBlogOgImage(data.ogImage);
+const resolvedOgImage = ogAsset
+  ? new URL(ogAsset.src, SITE_URL).toString()
+  : DEFAULT_OG_IMAGE;
 
 const canonical = `${SITE_URL}/blog/${slug}`;
 const pageTitle = `${data.title} | S2 Advogados`;
@@ -86,7 +93,11 @@ const graphItems: Record<string, unknown>[] = [
       '@type': 'WebPage',
       '@id': canonical,
     },
-    ...(heroMetadata ? { image: [new URL(heroMetadata.src, SITE_URL).toString()] } : {}),
+    ...(ogAsset
+      ? { image: [resolvedOgImage] }
+      : heroMetadata
+        ? { image: [new URL(heroMetadata.src, SITE_URL).toString()] }
+        : {}),
     inLanguage: 'pt-BR',
     author: {
       '@type': 'Person',
@@ -138,7 +149,7 @@ const articleJsonLd = {
   description={pageDescription}
   type="article"
   canonical={canonical}
-  ogImage={DEFAULT_OG_IMAGE}
+  ogImage={resolvedOgImage}
   publishedTime={publishedIso}
   modifiedTime={modifiedIso}
   articleAuthor={`${SITE_URL}${autor.url}`}
@@ -175,6 +186,24 @@ const articleJsonLd = {
           <h1 class="article-title">{data.title}</h1>
 
           <div class="article-meta">
+            <picture class="meta-avatar-picture">
+              <source
+                type="image/avif"
+                srcset={autor.foto.avatar.avifSrcSet}
+                sizes="32px"
+              />
+              <img
+                src={autor.foto.avatar.src}
+                srcset={autor.foto.avatar.webpSrcSet}
+                sizes="32px"
+                alt={autor.foto.alt}
+                width={autor.foto.avatar.width}
+                height={autor.foto.avatar.height}
+                loading="eager"
+                decoding="async"
+                class="meta-avatar-img"
+              />
+            </picture>
             <span>
               Por{' '}
               <a href={autor.url} class="meta-author-link">
@@ -204,7 +233,29 @@ const articleJsonLd = {
           )}
         </header>
 
-        {heroMetadata && (
+        {responsiveCover ? (
+          <figure class="article-hero-media">
+            <picture class="article-hero-picture">
+              <source
+                type="image/avif"
+                srcset={responsiveCover.avifSrcSet}
+                sizes="(max-width: 768px) calc(100vw - 3rem), 720px"
+              />
+              <img
+                src={responsiveCover.src}
+                srcset={responsiveCover.webpSrcSet}
+                sizes="(max-width: 768px) calc(100vw - 3rem), 720px"
+                alt={data.heroAlt || data.title}
+                width={responsiveCover.width}
+                height={responsiveCover.height}
+                loading="eager"
+                decoding="sync"
+                fetchpriority="high"
+                class="article-hero-img"
+              />
+            </picture>
+          </figure>
+        ) : heroMetadata && (
           <figure class="article-hero-media">
             <OptimizedPicture
               src={heroMetadata}
@@ -289,6 +340,40 @@ const articleJsonLd = {
             <a href="/blog">todos os artigos do blog</a>.
           </p>
         </section>
+
+        <aside class="article-author-box" aria-label="Sobre a autora">
+          <picture class="author-portrait-picture">
+            <source
+              type="image/avif"
+              srcset={autor.foto.retrato.avifSrcSet}
+              sizes="(max-width: 640px) 96px, 120px"
+            />
+            <img
+              src={autor.foto.retrato.src}
+              srcset={autor.foto.retrato.webpSrcSet}
+              sizes="(max-width: 640px) 96px, 120px"
+              alt={autor.foto.alt}
+              width={autor.foto.retrato.width}
+              height={autor.foto.retrato.height}
+              loading="lazy"
+              decoding="async"
+              class="author-portrait-img"
+            />
+          </picture>
+          <div class="author-box-info">
+            <span class="author-box-eyebrow">SOBRE A AUTORA</span>
+            <h2 class="author-box-name">{autor.nome}</h2>
+            <p class="author-box-cred">
+              {autor.cargo} • {autor.credencial}
+            </p>
+            <p class="author-box-bio">
+              Atuação voltada ao Direito de Trânsito na Santana Consultoria de Trânsito, com atendimento online em todo o Brasil.
+            </p>
+            <a href={autor.url} class="author-box-link">
+              Conhecer perfil completo <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </aside>
 
         <p class="article-legal-notice">
           Este conteúdo é informativo e não substitui a análise do seu caso por um advogado.
@@ -425,6 +510,20 @@ const articleJsonLd = {
     line-height: 1.5;
   }
 
+  .meta-avatar-picture {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .meta-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 1px solid var(--border-gold);
+  }
+
   .meta-author-link {
     color: var(--text-navy);
     font-weight: 600;
@@ -449,6 +548,11 @@ const articleJsonLd = {
 
   .article-hero-media {
     margin-bottom: 2rem;
+  }
+
+  .article-hero-picture {
+    display: block;
+    width: 100%;
   }
 
   .article-hero-media :global(.article-hero-img) {
@@ -700,6 +804,75 @@ const articleJsonLd = {
     text-underline-offset: 2px;
   }
 
+  .article-author-box {
+    margin: 2rem 0 1.5rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 1.35rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .author-portrait-picture {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .author-portrait-img {
+    width: 112px;
+    height: 140px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: center top;
+    border: 1px solid var(--border-light);
+  }
+
+  .author-box-eyebrow {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--accent-bronze);
+    margin-bottom: 0.25rem;
+  }
+
+  .author-box-name {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--text-navy);
+    margin-bottom: 0.2rem;
+  }
+
+  .author-box-cred {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--accent-bronze-dark);
+    margin-bottom: 0.55rem;
+  }
+
+  .author-box-bio {
+    font-size: 0.92rem;
+    color: var(--text-body);
+    line-height: 1.55;
+    margin-bottom: 0.65rem;
+  }
+
+  .author-box-link {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent-bronze);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .author-box-link:hover {
+    color: var(--accent-bronze-dark);
+  }
+
   .article-legal-notice {
     font-size: 0.86rem;
     color: var(--text-muted);
@@ -802,6 +975,16 @@ const articleJsonLd = {
   @media (max-width: 767px) {
     .blog-article {
       padding-bottom: 6.5rem;
+    }
+
+    .article-author-box {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .author-portrait-img {
+      width: 96px;
+      height: 120px;
     }
 
     .article-pagination {

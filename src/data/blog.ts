@@ -37,9 +37,9 @@ const blogImageModules = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
-export function resolveBlogHeroImage(heroImage?: string): ImageMetadata | undefined {
-  if (!heroImage) return undefined;
-  const normalized = heroImage.trim().replace(/^\/+/, '');
+function lookupAsset(pathOrRelative?: string): ImageMetadata | undefined {
+  if (!pathOrRelative) return undefined;
+  const normalized = pathOrRelative.trim().replace(/^\/+/, '');
   if (!normalized) return undefined;
 
   const candidates = [
@@ -54,4 +54,51 @@ export function resolveBlogHeroImage(heroImage?: string): ImageMetadata | undefi
     }
   }
   return undefined;
+}
+
+export function resolveBlogHeroImage(heroImage?: string): ImageMetadata | undefined {
+  return lookupAsset(heroImage);
+}
+
+export interface ResponsiveCoverAsset {
+  avifSrcSet: string;
+  webpSrcSet: string;
+  src: string;
+  width: number;
+  height: number;
+}
+
+export function resolveBlogResponsiveCover(
+  heroImage?: string
+): ResponsiveCoverAsset | undefined {
+  if (!heroImage) return undefined;
+  const base = heroImage
+    .trim()
+    .replace(/^\/+/, '')
+    .replace(/\.(avif|webp|jpe?g|png)$/i, '')
+    .replace(/-(800|1200|1600)$/, '');
+
+  const widths = [800, 1200, 1600] as const;
+  const avifList = widths
+    .map((w) => ({ w, meta: lookupAsset(`${base}-${w}.avif`) }))
+    .filter((x): x is { w: (typeof widths)[number]; meta: ImageMetadata } => Boolean(x.meta));
+  const webpList = widths
+    .map((w) => ({ w, meta: lookupAsset(`${base}-${w}.webp`) }))
+    .filter((x): x is { w: (typeof widths)[number]; meta: ImageMetadata } => Boolean(x.meta));
+
+  if (avifList.length === 0 || webpList.length === 0) return undefined;
+
+  const fallback = webpList.find((x) => x.w === 1200)?.meta ?? webpList[webpList.length - 1].meta;
+
+  return {
+    avifSrcSet: avifList.map((x) => `${x.meta.src} ${x.w}w`).join(', '),
+    webpSrcSet: webpList.map((x) => `${x.meta.src} ${x.w}w`).join(', '),
+    src: fallback.src,
+    width: fallback.width,
+    height: fallback.height,
+  };
+}
+
+export function resolveBlogOgImage(ogImage?: string): ImageMetadata | undefined {
+  return lookupAsset(ogImage);
 }

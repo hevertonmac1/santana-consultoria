@@ -13,6 +13,7 @@ const blog = defineCollection({
     revisadoEm: z.coerce.date().optional(),
     heroImage: z.string().optional(),
     heroAlt: z.string().optional().default(''),
+    ogImage: z.string().optional(),
     keyword: z.string().optional(),
     tags: z.array(z.string()).default([]),
     cluster: z

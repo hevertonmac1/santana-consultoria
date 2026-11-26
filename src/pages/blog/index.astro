@@ -5,6 +5,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import MobileFloatWpp from '../../components/MobileFloatWpp.astro';
 import { SITE_URL, buildWhatsAppUrl } from '../../data/site';
+import { AUTORES } from '../../data/autores';
 import { CLUSTER_LABELS, formatDateBR, cleanSlug, type BlogCluster } from '../../data/blog';
 
 const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -86,6 +87,7 @@ const wppBlogUrl = buildWhatsAppUrl(
             {posts.map((post) => {
               const slug = cleanSlug(post.id);
               const clusterLabel = CLUSTER_LABELS[post.data.cluster];
+              const autor = AUTORES[post.data.author] ?? AUTORES.marcela;
               return (
                 <article class="blog-card" id={`tema-${post.data.cluster}`}>
                   <div class="blog-card-meta">
@@ -106,9 +108,33 @@ const wppBlogUrl = buildWhatsAppUrl(
                     <p class="blog-card-desc">{post.data.description}</p>
                   )}
 
-                  <a href={`/blog/${slug}`} class="blog-card-link">
-                    Ler artigo completo <span aria-hidden="true">→</span>
-                  </a>
+                  <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                      <picture class="author-avatar-picture">
+                        <source
+                          type="image/avif"
+                          srcset={autor.foto.avatar.avifSrcSet}
+                          sizes="32px"
+                        />
+                        <img
+                          src={autor.foto.avatar.src}
+                          srcset={autor.foto.avatar.webpSrcSet}
+                          sizes="32px"
+                          alt={autor.foto.alt}
+                          width={autor.foto.avatar.width}
+                          height={autor.foto.avatar.height}
+                          loading="lazy"
+                          decoding="async"
+                          class="author-avatar-img"
+                        />
+                      </picture>
+                      <span class="author-avatar-name">{autor.nome}</span>
+                    </div>
+
+                    <a href={`/blog/${slug}`} class="blog-card-link">
+                      Ler artigo <span aria-hidden="true">→</span>
+                    </a>
+                  </div>
                 </article>
               );
             })}
@@ -257,15 +283,55 @@ const wppBlogUrl = buildWhatsAppUrl(
     flex: 1;
   }
 
+  .blog-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .blog-card-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .author-avatar-picture {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .author-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 1px solid var(--border-gold);
+  }
+
+  .author-avatar-name {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-navy);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .blog-card-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    margin-top: 0.4rem;
-    font-size: 0.9rem;
+    gap: 0.35rem;
+    font-size: 0.88rem;
     font-weight: 700;
     color: var(--accent-bronze);
     min-height: 44px;
+    flex-shrink: 0;
   }
 
   .blog-card-link:hover {
