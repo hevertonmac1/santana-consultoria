@@ -1,0 +1,815 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import MobileFloatWpp from '../../components/MobileFloatWpp.astro';
+import OptimizedPicture from '../../components/OptimizedPicture.astro';
+import { AUTORES } from '../../data/autores';
+import { SITE_URL, DEFAULT_OG_IMAGE, SITE_INFO, buildWhatsAppUrl } from '../../data/site';
+import {
+  CLUSTER_LABELS,
+  formatDateBR,
+  estimateReadingMinutes,
+  cleanSlug,
+  resolveBlogHeroImage,
+} from '../../data/blog';
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    'blog',
+    ({ data }) => import.meta.env.DEV || !data.draft
+  );
+
+  const sorted = entries.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+
+  return sorted.map((entry, index) => {
+    const slug = cleanSlug(entry.id);
+    const newer = index > 0 ? sorted[index - 1] : null;
+    const older = index < sorted.length - 1 ? sorted[index + 1] : null;
+    const related = sorted
+      .filter((other) => other.id !== entry.id && other.data.cluster === entry.data.cluster)
+      .slice(0, 3);
+
+    return {
+      params: { slug },
+      props: { entry, slug, newer, older, related },
+    };
+  });
+}
+
+const { entry, slug, newer, older, related } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+
+const autor = AUTORES[data.author] ?? AUTORES.marcela;
+const clusterLabel = CLUSTER_LABELS[data.cluster];
+const readingMinutes = estimateReadingMinutes(entry.body);
+const heroMetadata = resolveBlogHeroImage(data.heroImage);
+
+const canonical = `${SITE_URL}/blog/${slug}`;
+const pageTitle = `${data.title} | S2 Advogados`;
+const pageDescription =
+  data.description ||
+  `Artigo informativo sobre ${clusterLabel} por ${autor.nome} (${autor.credencial}).`;
+
+const defaultWppMessage = `Olá, Dra. Marcela! Li o artigo "${data.title}" e quero tirar uma dúvida sobre o meu caso. (Ref: blog-${slug})`;
+const finalWppMessage = data.cta?.mensagem || defaultWppMessage;
+const wppMidUrl = buildWhatsAppUrl(defaultWppMessage);
+const wppFinalUrl = buildWhatsAppUrl(finalWppMessage);
+
+const ctaFinalTitle =
+  data.cta?.titulo || 'Precisa de orientação sobre o seu caso de trânsito?';
+const ctaFinalButton = data.cta?.botao || 'Chamar no WhatsApp';
+
+const publishedIso = data.pubDate.toISOString();
+const modifiedIso = (data.updatedDate ?? data.pubDate).toISOString();
+
+const graphItems: Record<string, unknown>[] = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: data.title, item: canonical },
+    ],
+  },
+  {
+    '@type': 'Article',
+    headline: data.title,
+    description: pageDescription,
+    datePublished: publishedIso,
+    dateModified: modifiedIso,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+    },
+    ...(heroMetadata ? { image: [new URL(heroMetadata.src, SITE_URL).toString()] } : {}),
+    inLanguage: 'pt-BR',
+    author: {
+      '@type': 'Person',
+      name: autor.nomeSchema,
+      jobTitle: autor.cargo,
+      identifier: autor.credencial,
+      description: `${autor.cargo}, ${autor.credencial}`,
+      url: `${SITE_URL}${autor.url}`,
+    },
+    publisher: {
+      '@type': 'Attorney',
+      name: SITE_INFO.brandName,
+      url: SITE_URL,
+      telephone: '+5534991692737',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: SITE_INFO.address.street,
+        addressLocality: SITE_INFO.address.city,
+        addressRegion: SITE_INFO.address.region,
+        postalCode: SITE_INFO.address.postalCode,
+        addressCountry: SITE_INFO.address.country,
+      },
+    },
+  },
+];
+
+if (data.faq && data.faq.length > 0) {
+  graphItems.push({
+    '@type': 'FAQPage',
+    mainEntity: data.faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  });
+}
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': graphItems,
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  type="article"
+  canonical={canonical}
+  ogImage={DEFAULT_OG_IMAGE}
+  publishedTime={publishedIso}
+  modifiedTime={modifiedIso}
+  articleAuthor={`${SITE_URL}${autor.url}`}
+  articleTags={data.tags}
+  includeFaqSchema={false}
+  robots={data.draft ? 'noindex, nofollow' : 'index, follow'}
+  pageVariant="blog"
+  articleSlug={slug}
+  articleCluster={data.cluster}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  </Fragment>
+
+  <Header />
+
+  <main class="blog-article">
+    <article class="article-shell">
+      <div class="article-column">
+        <nav class="article-breadcrumb" aria-label="Caminho de navegação">
+          <a href="/">Início</a>
+          <span aria-hidden="true">›</span>
+          <a href="/blog">Blog</a>
+          <span aria-hidden="true">›</span>
+          <span class="crumb-current">{data.title}</span>
+        </nav>
+
+        <header class="article-header">
+          <div class="article-eyebrow">
+            <span class="article-cluster-tag">{clusterLabel}</span>
+            {data.draft && <span class="article-draft-tag">RASCUNHO (APENAS DEV)</span>}
+          </div>
+
+          <h1 class="article-title">{data.title}</h1>
+
+          <div class="article-meta">
+            <span>
+              Por{' '}
+              <a href={autor.url} class="meta-author-link">
+                {autor.nome}
+              </a>{' '}
+              ({autor.credencial})
+            </span>
+            <span class="meta-sep" aria-hidden="true">•</span>
+            <time datetime={publishedIso}>Publicado em {formatDateBR(data.pubDate)}</time>
+            {data.updatedDate && (
+              <>
+                <span class="meta-sep" aria-hidden="true">•</span>
+                <time datetime={data.updatedDate.toISOString()}>
+                  Atualizado em {formatDateBR(data.updatedDate)}
+                </time>
+              </>
+            )}
+            <span class="meta-sep" aria-hidden="true">•</span>
+            <span>{readingMinutes} min de leitura</span>
+          </div>
+
+          {data.revisadoEm && (
+            <p class="article-review-badge">
+              Revisado juridicamente por {autor.nome} ({autor.credencial}) em{' '}
+              {formatDateBR(data.revisadoEm)}.
+            </p>
+          )}
+        </header>
+
+        {heroMetadata && (
+          <figure class="article-hero-media">
+            <OptimizedPicture
+              src={heroMetadata}
+              alt={data.heroAlt || data.title}
+              widths={[480, 760, 1100]}
+              sizes="(max-width: 768px) calc(100vw - 3rem), 720px"
+              priority={true}
+              class="article-hero-img"
+            />
+          </figure>
+        )}
+
+        <div class="article-body">
+          <Content />
+        </div>
+
+        <!-- CTA discreto intermediário -->
+        <aside class="article-cta-mid" aria-label="Atendimento sobre o tema">
+          <p class="cta-mid-text">
+            Recebeu uma notificação? A Dra. Marcela pode analisar o seu caso.
+          </p>
+          <a
+            href={wppMidUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lawfarm-btn-wpp cta-mid-btn"
+          >
+            <span>Falar no WhatsApp</span>
+            <span class="arrow-circle">↗</span>
+          </a>
+        </aside>
+
+        {data.faq && data.faq.length > 0 && (
+          <section class="article-faq" aria-labelledby="faq-artigo-titulo">
+            <h2 id="faq-artigo-titulo" class="faq-section-title">
+              Perguntas frequentes
+            </h2>
+            <div class="article-faq-list">
+              {data.faq.map((item) => (
+                <details class="lawfarm-faq-item">
+                  <summary class="faq-summary">
+                    <span class="q-text">{item.q}</span>
+                    <span class="faq-plus" aria-hidden="true">+</span>
+                  </summary>
+                  <div class="faq-answer">
+                    <p>{item.a}</p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- CTA final obrigatório -->
+        <section class="article-cta-final" aria-labelledby="cta-artigo-final-titulo">
+          <div class="section-tag">
+            <span class="dot"></span>
+            ATENDIMENTO ONLINE EM TODO O BRASIL
+          </div>
+          <h2 id="cta-artigo-final-titulo" class="cta-final-title">
+            {ctaFinalTitle}
+          </h2>
+          <p class="cta-final-desc">
+            Converse diretamente com a {autor.nome} ({autor.credencial}) pelo WhatsApp para entender os caminhos legais do seu processo.
+          </p>
+          <div class="cta-final-actions">
+            <a
+              href={wppFinalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lawfarm-btn-wpp cta-final-btn"
+            >
+              <span>{ctaFinalButton}</span>
+              <span class="arrow-circle">↗</span>
+            </a>
+            <a href="/#servicos" class="lawfarm-btn-outline cta-secondary-link">
+              Ver áreas de atuação
+            </a>
+          </div>
+          <p class="article-internal-links">
+            Saiba mais sobre <a href="/#dra-marcela">quem conduz o escritório</a> ou volte para{' '}
+            <a href="/blog">todos os artigos do blog</a>.
+          </p>
+        </section>
+
+        <p class="article-legal-notice">
+          Este conteúdo é informativo e não substitui a análise do seu caso por um advogado.
+        </p>
+
+        {related.length > 0 && (
+          <section class="article-related" aria-labelledby="relacionados-titulo">
+            <h2 id="relacionados-titulo" class="related-heading">
+              Artigos relacionados
+            </h2>
+            <div class="related-grid">
+              {related.map((item) => (
+                <a href={`/blog/${cleanSlug(item.id)}`} class="related-card">
+                  <span class="related-cluster">{CLUSTER_LABELS[item.data.cluster]}</span>
+                  <strong class="related-title">{item.data.title}</strong>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {(newer || older) && (
+          <nav class="article-pagination" aria-label="Navegação entre artigos">
+            {newer ? (
+              <a href={`/blog/${cleanSlug(newer.id)}`} class="page-nav-link">
+                <span class="page-nav-label">← Artigo mais recente</span>
+                <span class="page-nav-title">{newer.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {older ? (
+              <a href={`/blog/${cleanSlug(older.id)}`} class="page-nav-link page-nav-next">
+                <span class="page-nav-label">Artigo anterior →</span>
+                <span class="page-nav-title">{older.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
+      </div>
+    </article>
+  </main>
+
+  <MobileFloatWpp message={defaultWppMessage} />
+  <Footer />
+</Layout>
+
+<style>
+  .blog-article {
+    padding: 2.5rem 0 5rem;
+  }
+
+  .article-column {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .article-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .article-breadcrumb a {
+    color: var(--text-body);
+    transition: var(--transition-fast);
+  }
+
+  .article-breadcrumb a:hover,
+  .article-breadcrumb a:focus-visible {
+    color: var(--accent-bronze);
+  }
+
+  .crumb-current {
+    color: var(--text-navy);
+    font-weight: 600;
+  }
+
+  .article-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .article-eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .article-cluster-tag {
+    color: var(--accent-bronze);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .article-draft-tag {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #f59e0b;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .article-title {
+    font-family: var(--font-h1);
+    font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+    line-height: 1.18;
+    color: var(--text-navy);
+    margin-bottom: 1rem;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .meta-author-link {
+    color: var(--text-navy);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--border-gold-bright);
+    text-underline-offset: 3px;
+  }
+
+  .meta-author-link:hover {
+    color: var(--accent-bronze);
+  }
+
+  .article-review-badge {
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    background: var(--bg-cream-alt);
+    border-left: 3px solid var(--accent-bronze);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: var(--text-navy);
+  }
+
+  .article-hero-media {
+    margin-bottom: 2rem;
+  }
+
+  .article-hero-media :global(.article-hero-img) {
+    width: 100%;
+    height: auto;
+    max-height: 460px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Corpo do artigo com escopo isolado em .article-body */
+  .article-body {
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: var(--text-body);
+  }
+
+  .article-body :global(h2) {
+    font-family: var(--font-heading);
+    font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+    color: var(--text-navy);
+    margin: 2.3rem 0 0.9rem;
+    line-height: 1.25;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--text-heading);
+    margin: 1.8rem 0 0.7rem;
+    line-height: 1.3;
+  }
+
+  .article-body :global(p) {
+    margin-bottom: 1.2rem;
+  }
+
+  .article-body :global(strong) {
+    color: var(--text-navy);
+  }
+
+  .article-body :global(a) {
+    color: var(--accent-bronze);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-body :global(a:hover) {
+    color: var(--accent-bronze-dark);
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 1.35rem 1.35rem;
+  }
+
+  .article-body :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .article-body :global(blockquote) {
+    margin: 1.6rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--bg-cream-alt);
+    border-left: 3px solid var(--accent-bronze);
+    border-radius: 0 10px 10px 0;
+    color: var(--text-navy);
+    font-style: italic;
+  }
+
+  .article-body :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .article-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.6rem 0;
+    font-size: 0.95rem;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    display: block;
+    overflow-x: auto;
+  }
+
+  .article-body :global(th),
+  .article-body :global(td) {
+    padding: 0.75rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .article-body :global(th) {
+    background: var(--bg-cream-alt);
+    color: var(--text-navy);
+    font-weight: 700;
+  }
+
+  .article-body :global(img) {
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    height: auto;
+  }
+
+  /* CTA intermediário discreto */
+  .article-cta-mid {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    background: var(--bg-cream-alt);
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .cta-mid-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-navy);
+    flex: 1 1 260px;
+  }
+
+  .cta-mid-btn {
+    padding: 0.7rem 1.35rem;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  .cta-mid-btn:focus-visible,
+  .cta-final-btn:focus-visible,
+  .cta-secondary-link:focus-visible {
+    outline: 3px solid var(--text-navy);
+    outline-offset: 3px;
+  }
+
+  /* FAQ do artigo */
+  .article-faq {
+    margin: 2.75rem 0;
+  }
+
+  .faq-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.65rem;
+    color: var(--text-navy);
+    margin-bottom: 1.15rem;
+  }
+
+  .article-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .lawfarm-faq-item {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .faq-summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 600;
+    color: var(--text-navy);
+    min-height: 48px;
+  }
+
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-plus {
+    color: var(--accent-bronze);
+    font-size: 1.25rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .lawfarm-faq-item[open] .faq-plus {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.15rem;
+    font-size: 0.98rem;
+    line-height: 1.68;
+    color: var(--text-body);
+  }
+
+  /* CTA final obrigatório */
+  .article-cta-final {
+    margin: 2.75rem 0 1.75rem;
+    padding: 2.25rem 1.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(158, 111, 56, 0.08) 100%);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .cta-final-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--text-navy);
+    margin-bottom: 0.85rem;
+  }
+
+  .cta-final-desc {
+    font-size: 1rem;
+    color: var(--text-body);
+    line-height: 1.65;
+    max-width: 540px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-final-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .cta-final-btn,
+  .cta-secondary-link {
+    min-height: 48px;
+  }
+
+  .article-internal-links {
+    margin-top: 1.35rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .article-internal-links a {
+    color: var(--accent-bronze);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .article-legal-notice {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* Artigos relacionados */
+  .article-related {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .related-heading {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    color: var(--text-navy);
+    margin-bottom: 1rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    transition: var(--transition-fast);
+  }
+
+  .related-card:hover {
+    border-color: var(--accent-bronze);
+    transform: translateY(-2px);
+  }
+
+  .related-cluster {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-bronze);
+  }
+
+  .related-title {
+    font-size: 0.95rem;
+    color: var(--text-navy);
+    line-height: 1.35;
+  }
+
+  /* Paginação anterior/próximo */
+  .article-pagination {
+    margin-top: 2.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .page-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #ffffff;
+    transition: var(--transition-fast);
+  }
+
+  .page-nav-link:hover {
+    border-color: var(--accent-bronze);
+  }
+
+  .page-nav-next {
+    text-align: right;
+  }
+
+  .page-nav-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-bronze);
+  }
+
+  .page-nav-title {
+    font-size: 0.92rem;
+    color: var(--text-navy);
+    font-weight: 600;
+  }
+
+  @media (max-width: 767px) {
+    .blog-article {
+      padding-bottom: 6.5rem;
+    }
+
+    .article-pagination {
+      grid-template-columns: 1fr;
+    }
+
+    .page-nav-next {
+      text-align: left;
+    }
+  }
+</style>

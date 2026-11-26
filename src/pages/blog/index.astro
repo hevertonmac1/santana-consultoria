@@ -1,0 +1,316 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import MobileFloatWpp from '../../components/MobileFloatWpp.astro';
+import { SITE_URL, buildWhatsAppUrl } from '../../data/site';
+import { CLUSTER_LABELS, formatDateBR, cleanSlug, type BlogCluster } from '../../data/blog';
+
+const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+
+const posts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const activeClusters = Array.from(
+  new Set(posts.map((p) => p.data.cluster))
+) as BlogCluster[];
+
+const canonical = `${SITE_URL}/blog`;
+const wppBlogUrl = buildWhatsAppUrl(
+  'Olá, Dra. Marcela! Estava no blog da S2 Advogados e quero tirar uma dúvida sobre o meu caso. (Ref: blog-index)'
+);
+---
+
+<Layout
+  title="Blog | S2 Advogados, Direito de Trânsito em Uberlândia e todo o Brasil"
+  description="Artigos informativos sobre Direito de Trânsito, recurso de multas, suspensão e cassação de CNH e pontuação. Conteúdo técnico da Dra. Marcela Santana (OAB/MG 220.180)."
+  canonical={canonical}
+  includeFaqSchema={false}
+  pageVariant="blog"
+>
+  <Header />
+
+  <main class="blog-index">
+    <section class="blog-hero">
+      <div class="container">
+        <div class="section-tag">
+          <span class="dot"></span>
+          BLOG JURÍDICO
+        </div>
+        <h1 class="blog-hero-title">
+          Conteúdo informativo sobre <span class="text-bronze">Direito de Trânsito</span>
+        </h1>
+        <p class="blog-hero-subtitle">
+          Guias práticos e objetivos sobre multas, suspensão de CNH, cassação e procedimentos no DETRAN, JARI e CETRAN.
+        </p>
+
+        {activeClusters.length > 1 && (
+          <nav class="cluster-chips" aria-label="Temas do blog">
+            {activeClusters.map((cluster) => (
+              <a href={`#tema-${cluster}`} class="cluster-chip">
+                {CLUSTER_LABELS[cluster]}
+              </a>
+            ))}
+          </nav>
+        )}
+      </div>
+    </section>
+
+    <section class="blog-list-section">
+      <div class="container">
+        {posts.length === 0 ? (
+          <div class="blog-empty-state">
+            <h2 class="empty-title">Em breve, novos artigos por aqui</h2>
+            <p class="empty-text">
+              Estamos preparando conteúdos revisados pela Dra. Marcela Santana sobre recursos de multa, suspensão e cassação de CNH. Enquanto isso, você pode tirar sua dúvida diretamente pelo WhatsApp.
+            </p>
+            <div class="empty-actions">
+              <a
+                href={wppBlogUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lawfarm-btn-wpp"
+              >
+                <span>Falar no WhatsApp</span>
+                <span class="arrow-circle">↗</span>
+              </a>
+              <a href="/#servicos" class="lawfarm-btn-outline">
+                Conhecer áreas de atuação
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="blog-grid">
+            {posts.map((post) => {
+              const slug = cleanSlug(post.id);
+              const clusterLabel = CLUSTER_LABELS[post.data.cluster];
+              return (
+                <article class="blog-card" id={`tema-${post.data.cluster}`}>
+                  <div class="blog-card-meta">
+                    <span class="blog-card-cluster">{clusterLabel}</span>
+                    {post.data.draft && (
+                      <span class="blog-draft-badge">RASCUNHO</span>
+                    )}
+                    <time datetime={post.data.pubDate.toISOString()} class="blog-card-date">
+                      {formatDateBR(post.data.pubDate)}
+                    </time>
+                  </div>
+
+                  <h2 class="blog-card-title">
+                    <a href={`/blog/${slug}`}>{post.data.title}</a>
+                  </h2>
+
+                  {post.data.description && (
+                    <p class="blog-card-desc">{post.data.description}</p>
+                  )}
+
+                  <a href={`/blog/${slug}`} class="blog-card-link">
+                    Ler artigo completo <span aria-hidden="true">→</span>
+                  </a>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+
+  <MobileFloatWpp
+    message="Olá, Dra. Marcela! Estava no blog da S2 Advogados e quero tirar uma dúvida sobre o meu caso. (Ref: blog-index)"
+  />
+  <Footer />
+</Layout>
+
+<style>
+  .blog-index {
+    min-height: 60vh;
+  }
+
+  .blog-hero {
+    padding: 4rem 0 3rem;
+    background: radial-gradient(circle at 75% 25%, rgba(158, 111, 56, 0.06) 0%, transparent 60%);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .blog-hero-title {
+    font-family: var(--font-h1);
+    font-size: clamp(2.1rem, 4vw, 3.2rem);
+    color: var(--text-navy);
+    max-width: 780px;
+    margin-bottom: 1rem;
+  }
+
+  .blog-hero-subtitle {
+    font-size: 1.08rem;
+    color: var(--text-body);
+    max-width: 640px;
+    line-height: 1.65;
+  }
+
+  .cluster-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.75rem;
+  }
+
+  .cluster-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.95rem;
+    min-height: 36px;
+    border-radius: var(--radius-pill);
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    color: var(--text-navy);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition-fast);
+  }
+
+  .cluster-chip:hover,
+  .cluster-chip:focus-visible {
+    border-color: var(--accent-bronze);
+    color: var(--accent-bronze);
+    outline: 2px solid var(--accent-bronze);
+    outline-offset: 2px;
+  }
+
+  .blog-list-section {
+    padding: 4rem 0 5.5rem;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .blog-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 1.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-fast);
+  }
+
+  .blog-card:hover {
+    border-color: var(--accent-bronze);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .blog-card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .blog-card-cluster {
+    color: var(--accent-bronze);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .blog-draft-badge {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #f59e0b;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .blog-card-date {
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .blog-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    line-height: 1.3;
+    color: var(--text-navy);
+  }
+
+  .blog-card-title a:hover,
+  .blog-card-title a:focus-visible {
+    color: var(--accent-bronze);
+  }
+
+  .blog-card-desc {
+    font-size: 0.96rem;
+    color: var(--text-body);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .blog-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent-bronze);
+    min-height: 44px;
+  }
+
+  .blog-card-link:hover {
+    color: var(--accent-bronze-dark);
+  }
+
+  .blog-empty-state {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .empty-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--text-navy);
+    margin-bottom: 0.85rem;
+  }
+
+  .empty-text {
+    font-size: 1.02rem;
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 1.85rem;
+  }
+
+  .empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  @media (max-width: 767px) {
+    .blog-list-section {
+      padding-bottom: 7rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

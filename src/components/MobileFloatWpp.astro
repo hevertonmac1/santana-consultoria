@@ -1,0 +1,57 @@
+---
+import { buildWhatsAppUrl } from '../data/site';
+
+interface Props {
+  message?: string;
+}
+
+const {
+  message = 'Olá, Dra. Marcela! Gostaria de falar no WhatsApp.',
+} = Astro.props;
+
+const whatsappHref = buildWhatsAppUrl(message);
+---
+
+<div class="mobile-float-wpp">
+  <div class="float-info">
+    <strong class="float-title">Dra. Marcela Santana</strong>
+    <span class="float-subtitle">Direito de Trânsito</span>
+  </div>
+
+  <a
+    href={whatsappHref}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="lawfarm-btn-wpp btn-compact"
+  >
+    <span>Chamar no WhatsApp</span>
+    <span class="arrow-circle">↗</span>
+  </a>
+</div>
+
+<style>
+  .btn-compact {
+    padding: 0.65rem 1.15rem;
+    font-size: 0.8rem;
+    min-height: 44px;
+  }
+
+  .btn-compact .arrow-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+
+  .float-info .float-title {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-navy);
+    font-weight: 700;
+  }
+
+  .float-info .float-subtitle {
+    font-size: 0.75rem;
+    color: var(--accent-bronze);
+    font-weight: 600;
+  }
+</style>

@@ -42,6 +42,11 @@
     if (el.closest('header')) return 'header';
     if (el.closest('footer')) return 'footer';
     if (el.closest('.mobile-float-wpp')) return 'barra_flutuante_mobile';
+    if (el.closest('.article-cta-mid')) return 'cta_artigo_meio';
+    if (el.closest('.article-cta-final')) return 'cta_artigo_final';
+    if (el.closest('.article-faq')) return 'faq_artigo';
+    if (el.closest('.blog-article')) return 'artigo';
+    if (el.closest('.blog-index')) return 'blog';
     if (el.closest('.lawfarm-hero-section')) return 'hero';
     if (el.closest('#servicos')) return 'servicos';
     if (el.closest('#diferenciais')) return 'diferenciais';
@@ -60,6 +65,11 @@
     ['como_funciona', '#como-funciona'],
     ['faq', '#faq'],
     ['cta_final', '.lawfarm-cta-section'],
+    ['blog', '.blog-index'],
+    ['artigo', '.blog-article'],
+    ['cta_artigo_meio', '.article-cta-mid'],
+    ['faq_artigo', '.article-faq'],
+    ['cta_artigo_final', '.article-cta-final'],
     ['footer', 'footer']
   ];
 
@@ -78,6 +88,11 @@
   }
 
   /* ---------- 1) contexto da visita (1x por página) ---------- */
+  var bodyEl = doc.body;
+  var pageVariant = (bodyEl && bodyEl.getAttribute('data-page-variant')) || (location.pathname.indexOf('/blog') === 0 ? 'blog' : '');
+  var articleSlug = (bodyEl && bodyEl.getAttribute('data-article-slug')) || '';
+  var articleCluster = (bodyEl && bodyEl.getAttribute('data-article-cluster')) || '';
+
   push('page_context', {
     utm_source_page: qs('utm_source'),
     utm_medium_page: qs('utm_medium'),
@@ -88,7 +103,10 @@
       try { return doc.referrer ? new URL(doc.referrer).hostname : '(direto)'; } catch (e) { return ''; }
     })(),
     viewport: window.innerWidth + 'x' + window.innerHeight,
-    lang: navigator.language || ''
+    lang: navigator.language || '',
+    page_variant: pageVariant,
+    article_slug: articleSlug,
+    article_cluster: articleCluster
   });
 
   /* ---------- 2) cliques (delegação global) ---------- */
@@ -119,13 +137,16 @@
 
       if (isWhatsApp(a)) {
         var svc = serviceOf(a);
+        var wppLoc = loc === 'cta_artigo_meio' ? 'artigo_meio' : (loc === 'cta_artigo_final' ? 'artigo_final' : loc);
         push('whatsapp_click', {
-          click_location: loc,
+          click_location: wppLoc,
           cta_text: label,
           service: svc,
           cta_type: a.className && /card-action/.test(a.className) ? 'card_servico' : (a.className || '').split(' ')[0],
           seconds_on_page: Math.round((Date.now() - START) / 1000),
-          max_scroll_pct: maxScroll
+          max_scroll_pct: maxScroll,
+          page_variant: pageVariant,
+          article_slug: articleSlug
         });
         return;
       }
@@ -133,9 +154,14 @@
       if (/^tel:/i.test(href)) { push('phone_click', { click_location: loc, cta_text: label }); return; }
       if (/^mailto:/i.test(href)) { push('email_click', { click_location: loc, cta_text: label }); return; }
 
+      if (a.classList.contains('brand-link')) {
+        push('logo_click', { click_location: loc });
+        return;
+      }
+
       if (href.charAt(0) === '#' || (a.hostname === location.hostname && a.pathname === location.pathname && a.hash)) {
         var target = a.hash || href;
-        if (a.classList.contains('brand-link') || target === '#') {
+        if (target === '#') {
           push('logo_click', { click_location: loc });
         } else {
           push('nav_click', { nav_target: target.replace('#', ''), nav_label: label, click_location: loc });

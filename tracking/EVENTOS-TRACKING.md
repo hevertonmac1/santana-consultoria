@@ -1,6 +1,6 @@
 # S2 Advogados — Medição (GA4 + GTM + Looker Studio)
 
-Atualizado em 30/09/2026.
+Atualizado em 26/11/2026.
 
 ## Onde está cada coisa
 
@@ -26,9 +26,9 @@ Fuso do GA4: São Paulo (GMT-03:00). Moeda: BRL.
 
 | Evento | Quando dispara | Parâmetros principais |
 |---|---|---|
-| `page_context` | 1x ao abrir a página | utm_*_page, has_gclid, referrer_host, viewport, lang |
+| `page_context` | 1x ao abrir a página | utm_*_page, has_gclid, referrer_host, viewport, lang, page_variant, article_slug, article_cluster |
 | `first_interaction` | primeira ação do visitante | interaction_type (click/scroll), seconds_to_interact |
-| `whatsapp_click` | qualquer clique em link de WhatsApp | click_location, cta_text, service, cta_type, seconds_on_page, max_scroll_pct |
+| `whatsapp_click` | qualquer clique em link de WhatsApp | click_location, cta_text, service, cta_type, seconds_on_page, max_scroll_pct, page_variant, article_slug |
 | `cta_view` | botão de WhatsApp entrou 60% na tela | click_location, service, cta_text |
 | `nav_click` | clique no menu / rodapé (âncoras) | nav_target, nav_label, click_location |
 | `logo_click` | clique na logo | click_location |
@@ -45,9 +45,11 @@ Fuso do GA4: São Paulo (GMT-03:00). Moeda: BRL.
 | `page_exit` | saída / aba escondida | engaged_seconds, max_scroll_pct, sections_viewed, top_section |
 | `js_error` | erro de JavaScript no site | error_message, error_file |
 
-Valores de `click_location`: header, hero, servicos, diferenciais, sobre_dra_marcela, como_funciona, faq, cta_final, footer, barra_flutuante_mobile.
+Valores de `click_location`: header, hero, servicos, diferenciais, sobre_dra_marcela, como_funciona, faq, cta_final, footer, barra_flutuante_mobile, blog, artigo, artigo_meio, artigo_final, faq_artigo.
 
-Valores de `section_name`: hero, servicos, diferenciais, sobre_dra_marcela, como_funciona, faq, cta_final, footer.
+Valores de `section_name`: hero, servicos, diferenciais, sobre_dra_marcela, como_funciona, faq, cta_final, blog, artigo, cta_artigo_meio, faq_artigo, cta_artigo_final, footer.
+
+Dimensões novas enviadas pelo blog (cadastrar no GA4 se quiser relatórios por artigo): `page_variant` (`blog`), `article_slug` e `article_cluster`.
 
 ## Registrado no GA4 (para usar no Looker Studio)
 
